@@ -1,57 +1,116 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Graphics Scene</title>
+    <title>Canvas Brush Drawing</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        h2{
+            color: #333;
+        }
+
+        canvas{
+            border: 3px solid #444;
+            background-color: white;
+            cursor: crosshair;
+            margin-top: 15px;
+        }
+
+        .controls{
+            margin-top: 15px;
+        }
+
+        button, input{
+            padding: 8px 12px;
+            margin: 5px;
+            font-size: 15px;
+        }
+
+        label{
+            font-weight: bold;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>My First Graphics Scene</h2>
+    <h2>Brush Drawing Application</h2>
 
-<canvas id="myCanvas" width="500" height="350" 
-style="border:1px solid black;"></canvas>
+    <div class="controls">
+
+        <!-- Brush Color -->
+        <label>Brush Color:</label>
+        <input type="color" id="colorPicker" value="#ff0000">
+
+        <!-- Brush Size -->
+        <label>Brush Size:</label>
+        <input type="range" id="brushSize" min="1" max="30" value="5">
+
+        <!-- Clear Screen Button -->
+        <button onclick="clearCanvas()">Clear Screen</button>
+
+    </div>
+
+    <!-- Drawing Area -->
+    <canvas id="myCanvas" width="700" height="400"></canvas>
 
 <script>
 
-let canvas = document.getElementById("myCanvas");
-let ctx = canvas.getContext("2d");
+    const canvas = document.getElementById("myCanvas");
+    const ctx = canvas.getContext("2d");
 
-/* Background Sky */
-ctx.fillStyle = "#d8b4fe";   // light purple background
-ctx.fillRect(0, 0, 500, 350);
+    let drawing = false;
 
-/* Ground */
-ctx.fillStyle = "#3b7a57";   // dark green ground
-ctx.fillRect(0, 250, 500, 100);
+    // Start Drawing
+    canvas.addEventListener("mousedown", startDraw);
 
-/* Sun */
-ctx.beginPath();
-ctx.arc(80, 70, 35, 0, 2 * Math.PI);
-ctx.fillStyle = "orange";
-ctx.fill();
+    // Stop Drawing
+    canvas.addEventListener("mouseup", stopDraw);
 
-/* House Body */
-ctx.fillStyle = "#1e3a8a";   // dark blue house
-ctx.fillRect(190, 170, 120, 90);
+    // Draw on Canvas
+    canvas.addEventListener("mousemove", draw);
 
-/* Roof */
-ctx.beginPath();
-ctx.moveTo(190, 170);
-ctx.lineTo(310, 170);
-ctx.lineTo(250, 110);
-ctx.closePath();
-ctx.fillStyle = "#f97316";   // orange roof
-ctx.fill();
+    function startDraw(e){
+        drawing = true;
+        draw(e);
+    }
 
-/* Door */
-ctx.fillStyle = "#4b2e2e";   // brown door
-ctx.fillRect(235, 210, 30, 50);
+    function stopDraw(){
+        drawing = false;
+        ctx.beginPath();
+    }
 
-/* Left Window */
-ctx.fillStyle = "white";
-ctx.fillRect(205, 190, 25, 25);
+    function draw(e){
 
-/* Right Window */
-ctx.fillRect(270, 190, 25, 25);
+        if(!drawing) return;
+
+        // Brush Color
+        const color = document.getElementById("colorPicker").value;
+
+        // Brush Size
+        const size = document.getElementById("brushSize").value;
+
+        ctx.lineWidth = size;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = color;
+
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(e.offsetX, e.offsetY);
+    }
+
+    // Clear Canvas
+    function clearCanvas(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 
 </script>
 
