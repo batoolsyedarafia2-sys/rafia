@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crystal Catcher Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #0f172a, #1e293b);
+        }
+
+        canvas {
+            display: block;
+            margin: auto;
+            background: #1e293b;
+            border: 3px solid white;
+        }
+
+        h2 {
+            text-align: center;
+            color: white;
+            font-family: Arial;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Crystal Catcher Mini Game</h2>
+
+<canvas id="gameCanvas" width="700" height="450"></canvas>
+
+<script>
+
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+// Basket Player
+let basket = {
+    x: 280,
+    y: 390,
+    width: 140,
+    height: 25,
+    speed: 35
+};
+
+// Falling Crystal
+let crystal = {
+    x: Math.random() * 650,
+    y: 0,
+    size: 35,
+    speed: 4
+};
+
+// Score
+let score = 0;
+
+// Keyboard Controls
+window.addEventListener("keydown", moveBasket);
+
+function moveBasket(e) {
+    if (e.key === "ArrowLeft" && basket.x > 0) {
+        basket.x -= basket.speed;
+    }
+
+    if (e.key === "ArrowRight" && basket.x < canvas.width - basket.width) {
+        basket.x += basket.speed;
+    }
+}
+
+// Draw Background Stars
+function drawStars() {
+    for (let i = 0; i < 80; i++) {
+        ctx.fillStyle = "white";
+        ctx.fillRect(Math.random() * 700, Math.random() * 450, 2, 2);
+    }
+}
+
+// Draw Basket
+function drawBasket() {
+    ctx.fillStyle = "#22c55e";
+    ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+
+    // Basket top line
+    ctx.fillStyle = "#14532d";
+    ctx.fillRect(basket.x, basket.y, basket.width, 5);
+}
+
+// Draw Crystal Shape
+function drawCrystal() {
+    ctx.beginPath();
+    ctx.moveTo(crystal.x + 18, crystal.y);
+    ctx.lineTo(crystal.x + 35, crystal.y + 18);
+    ctx.lineTo(crystal.x + 18, crystal.y + 35);
+    ctx.lineTo(crystal.x, crystal.y + 18);
+    ctx.closePath();
+
+    ctx.fillStyle = "#38bdf8";
+    ctx.fill();
+}
+
+// Draw Score
+function drawScore() {
+    ctx.fillStyle = "white";
+    ctx.font = "24px Arial";
+    ctx.fillText("Score: " + score, 20, 35);
+}
+
+// Update Crystal Position
+function updateCrystal() {
+    crystal.y += crystal.speed;
+
+    // Catch Detection
+    if (
+        crystal.y + crystal.size >= basket.y &&
+        crystal.x >= basket.x &&
+        crystal.x <= basket.x + basket.width
+    ) {
+        score++;
+
+        crystal.x = Math.random() * 650;
+        crystal.y = 0;
+
+        // Increase speed slightly
+        crystal.speed += 0.3;
+    }
+
+    // Missed Crystal
+    if (crystal.y > canvas.height) {
+        alert("Game Over! Your Score: " + score);
+
+        score = 0;
+        crystal.speed = 4;
+
+        crystal.x = Math.random() * 650;
+        crystal.y = 0;
+    }
+}
+
+// Main Game Loop
+function gameLoop() {
+
+    // Background
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    drawStars();
+    drawBasket();
+    drawCrystal();
+    drawScore();
+
+    updateCrystal();
+
+    requestAnimationFrame(gameLoop);
+}
+
+// Start Game
+gameLoop();
+
+</script>
+
+</body>
+</html>
+
