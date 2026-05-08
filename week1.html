@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Graphics Scene</title>
+</head>
+<body>
+
+<h2>My First Graphics Scene</h2>
+
+<canvas id="myCanvas" width="500" height="350" 
+style="border:1px solid black;"></canvas>
+
+<script>
+
+let canvas = document.getElementById("myCanvas");
+let ctx = canvas.getContext("2d");
+
+/* Background Sky */
+ctx.fillStyle = "#d8b4fe";   // light purple background
+ctx.fillRect(0, 0, 500, 350);
+
+/* Ground */
+ctx.fillStyle = "#3b7a57";   // dark green ground
+ctx.fillRect(0, 250, 500, 100);
+
+/* Sun */
+ctx.beginPath();
+ctx.arc(80, 70, 35, 0, 2 * Math.PI);
+ctx.fillStyle = "orange";
+ctx.fill();
+
+/* House Body */
+ctx.fillStyle = "#1e3a8a";   // dark blue house
+ctx.fillRect(190, 170, 120, 90);
+
+/* Roof */
+ctx.beginPath();
+ctx.moveTo(190, 170);
+ctx.lineTo(310, 170);
+ctx.lineTo(250, 110);
+ctx.closePath();
+ctx.fillStyle = "#f97316";   // orange roof
+ctx.fill();
+
+/* Door */
+ctx.fillStyle = "#4b2e2e";   // brown door
+ctx.fillRect(235, 210, 30, 50);
+
+/* Left Window */
+ctx.fillStyle = "white";
+ctx.fillRect(205, 190, 25, 25);
+
+/* Right Window */
+ctx.fillRect(270, 190, 25, 25);
+
+</script>
+
+</body>
+</html>
