@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>3D Neon Pyramid</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>3D Neon Pyramid</h1>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
+body{
+  margin:0;
+  overflow:hidden;
+  background:#081229;
+}
+
+h1{
+  position:absolute;
+  top:20px;
+  width:100%;
+  text-align:center;
+  color:white;
+  font-family:Arial;
+  letter-spacing:5px;
+  text-shadow:0 0 20px cyan;
+}
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth/window.innerHeight,
+  0.1,
+  1000
+);
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Pyramid
+const geometry = new THREE.ConeGeometry(2,4,4);
+
+const material = new THREE.MeshBasicMaterial({
+  color:0x00ffff,
+  wireframe:false
+});
+
+const pyramid = new THREE.Mesh(geometry, material);
+scene.add(pyramid);
+
+camera.position.z = 6;
+
+// Animation
+function animate(){
+  requestAnimationFrame(animate);
+
+  pyramid.rotation.x += 0.01;
+  pyramid.rotation.y += 0.01;
+
+  renderer.render(scene,camera);
+}
+
+animate();
